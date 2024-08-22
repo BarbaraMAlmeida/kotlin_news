@@ -21,7 +21,7 @@ class MainActivity : ComponentActivity() {
             KotlinnewsTheme {
                 Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
                     Greeting(
-                        name = "Android",
+                        name = "barbara",
                         modifier = Modifier.padding(innerPadding)
                     )
                 }
