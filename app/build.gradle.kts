@@ -71,4 +71,18 @@ dependencies {
     //dependencia navigation
     implementation("androidx.navigation:navigation-compose:2.7.1")
 
+    //animações de transição de tela
+    implementation("com.google.accompanist:accompanist-navigation-animation:0.30.1")
+
+    //Retrofit para consumo de API's
+    //cria o client http
+    implementation("com.squareup.retrofit2:retrofit:2.9.0")
+    //converte o objeto para texto ou texto para objeto
+    implementation("com.squareup.retrofit2:converter-gson:2.9.0")
+
+    implementation("org.jetbrains.kotlin:kotlin-stdlib:1.8.0")
+
+    implementation("io.coil-kt:coil-compose:2.0.0")
+
+
 }

@@ -11,6 +11,9 @@ import androidx.compose.ui.Modifier
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import br.com.fiap.kotlin_news.screens.DetalheNoticiaScreen
+import br.com.fiap.kotlin_news.screens.HomeScreen
+import br.com.fiap.kotlin_news.screens.NoticiasScreen
 import br.com.fiap.kotlin_news.ui.theme.KotlinnewsTheme
 
 class MainActivity : ComponentActivity() {
@@ -26,17 +29,20 @@ class MainActivity : ComponentActivity() {
 
                     NavHost(navController = navController, startDestination = "home") {
                         composable(route = "home") {
+                            HomeScreen(navController)
 
                         }
-                        composable(route = "noticias") {
+                        composable(route = "noticias/{localizacao}") {
+                            val localizacao_preferencia = it.arguments?.getString("localizacao")
+                            NoticiasScreen(navController, localizacao_preferencia!!)
 
                         }
-                        composable(route = "detalhe-noticia") {
-
+                        composable(route = "detalhe-noticia/{noticia}") {
+                            val id = it.arguments?.getString("id")
+                            DetalheNoticiaScreen(navController, id!!)
                         }
 
                     }
-
                 }
             }
         }
