@@ -7,8 +7,8 @@ import retrofit2.converter.gson.GsonConverterFactory
 
 class RetrofitFactory {
 
-    private val API_KEY = "dd7ca759de9c459b882183d4c01d7050"
-    private val URL = "https://newsapi.org/v2/" // URL base terminando com '/'
+    private val API_KEY = "8af2e8c4-704f-452e-a4e3-c36f4630a046"
+    private val URL = "https://eventregistry.org/api/v1/article/" // URL base terminando com '/'
 
     // Opcional: Usar um Interceptor para adicionar a API Key automaticamente
     private val client = OkHttpClient.Builder()

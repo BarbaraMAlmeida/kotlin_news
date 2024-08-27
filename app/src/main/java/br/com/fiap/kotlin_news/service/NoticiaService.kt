@@ -1,8 +1,10 @@
 package br.com.fiap.kotlin_news.service
 
 import br.com.fiap.kotlin_news.model.NewsResponse
+import br.com.fiap.kotlin_news.model.Results
 import retrofit2.Call
 import retrofit2.http.GET
+import retrofit2.http.Headers
 import retrofit2.http.Query
 
 interface NoticiaService {
@@ -21,10 +23,9 @@ interface NoticiaService {
 //    ): Call<List<Noticia>>
 
 
-    @GET("everything")
+    @Headers("Content-Type: application/json; charset=utf-8")
+    @GET("getArticles")
     fun getNoticiaByCidade(
-        @Query("q") cidade: String,
-        @Query("apiKey") apiKey: String = "dd7ca759de9c459b882183d4c01d7050",
-        @Query("sortBy") sortBy: String = "publishAt"
+        @Query("sourceLocationUri") cidade: String
     ):  Call<NewsResponse>
 }

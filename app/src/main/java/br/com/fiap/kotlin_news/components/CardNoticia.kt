@@ -27,6 +27,8 @@ import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.text.font.Font
+import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -36,11 +38,11 @@ import br.com.fiap.kotlin_news.ui.theme.BackgroundDark
 import br.com.fiap.kotlin_news.ui.theme.GreenPrimary
 import br.com.fiap.kotlin_news.ui.theme.White
 import coil.compose.rememberAsyncImagePainter
+import br.com.fiap.kotlin_news.R
 
 @Composable
 fun CardNoticia(noticia: Noticia, navController: NavController) {
     Log.i("noticia", "${noticia}")
-
 
     Spacer(modifier = Modifier.height(10.dp))
     Card(modifier = Modifier
@@ -65,7 +67,7 @@ fun CardNoticia(noticia: Noticia, navController: NavController) {
             .fillMaxSize()
             .padding(end = 12.dp, start = 12.dp)) {
             Image(
-                painter = rememberAsyncImagePainter(model = noticia.urlToImage),
+                painter = rememberAsyncImagePainter(model = noticia.image),
                 contentDescription = "Imagem da notícia",
                 modifier = Modifier
                     .fillMaxWidth()
@@ -85,8 +87,10 @@ fun CardNoticia(noticia: Noticia, navController: NavController) {
             Row (modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.SpaceBetween,
                 verticalAlignment = Alignment.CenterVertically) {
-                Text(text = "fonte: ${noticia.source.name}",
-                    color = Color.White)
+                Text(text = "fonte: ${noticia.source.title}",
+                    color = Color.White,
+
+                   )
                 Row () {
                     OutlinedButton(
                         onClick = {

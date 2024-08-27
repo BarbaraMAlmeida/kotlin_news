@@ -22,6 +22,7 @@ import br.com.fiap.kotlin_news.components.CardNoticia
 import br.com.fiap.kotlin_news.components.TopMenu
 import br.com.fiap.kotlin_news.model.NewsResponse
 import br.com.fiap.kotlin_news.model.Noticia
+import br.com.fiap.kotlin_news.model.Results
 import br.com.fiap.kotlin_news.service.RetrofitFactory
 import br.com.fiap.kotlin_news.ui.theme.BackgroundDark
 import retrofit2.Call
@@ -51,9 +52,10 @@ fun NoticiasScreen(navController: NavController, localizacaoPreferencia: String)
             Spacer(modifier = Modifier.height(10.dp))
             // Usando LaunchedEffect para carregar dados automaticamente ao abrir a tela
             LaunchedEffect(localizacao) {
+                val path = "https://en.wikipedia.org/wiki/Cuiabá";
                 val call = RetrofitFactory()
                     .getNoticiaService()
-                    .getNoticiaByCidade(localizacao)
+                    .getNoticiaByCidade(path)
 
                 call.enqueue(object : Callback<NewsResponse> {
                     override fun onResponse(
@@ -61,8 +63,8 @@ fun NoticiasScreen(navController: NavController, localizacaoPreferencia: String)
                         response: Response<NewsResponse>
                     ) {
                         if (response.isSuccessful) {
-                            listaNoticiasState = response.body()?.articles?.filter { it.title != "[Removed]" && it.title != null }  ?: emptyList()
-                            Log.i("fiap", "onResponse ${response.body()?.articles}")
+                            listaNoticiasState = response.body()?.articles?.results  ?: emptyList()
+                            Log.i("fiap", "onResponse ${response.body()}")
                         } else {
                             Log.e("fiap", "Erro na resposta: ${response.errorBody()?.string()}")
                         }
