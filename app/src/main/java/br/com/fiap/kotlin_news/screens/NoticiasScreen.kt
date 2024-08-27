@@ -22,7 +22,6 @@ import br.com.fiap.kotlin_news.components.CardNoticia
 import br.com.fiap.kotlin_news.components.TopMenu
 import br.com.fiap.kotlin_news.model.NewsResponse
 import br.com.fiap.kotlin_news.model.Noticia
-import br.com.fiap.kotlin_news.model.Results
 import br.com.fiap.kotlin_news.service.RetrofitFactory
 import br.com.fiap.kotlin_news.ui.theme.BackgroundDark
 import retrofit2.Call
@@ -52,7 +51,7 @@ fun NoticiasScreen(navController: NavController, localizacaoPreferencia: String)
             Spacer(modifier = Modifier.height(10.dp))
             // Usando LaunchedEffect para carregar dados automaticamente ao abrir a tela
             LaunchedEffect(localizacao) {
-                val path = "https://en.wikipedia.org/wiki/Cuiabá";
+                val path = "https://en.wikipedia.org/wiki/${localizacao}";
                 val call = RetrofitFactory()
                     .getNoticiaService()
                     .getNoticiaByCidade(path)
