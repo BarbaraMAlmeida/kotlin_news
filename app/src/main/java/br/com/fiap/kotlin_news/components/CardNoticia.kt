@@ -12,6 +12,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
@@ -87,9 +88,9 @@ fun CardNoticia(noticia: Noticia, navController: NavController) {
             Row (modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.SpaceBetween,
                 verticalAlignment = Alignment.CenterVertically) {
-                Text(text = "fonte: ${noticia.source.title}",
+                Text(
                     color = Color.White,
-
+                    text = if (noticia.source.title.length > 20) noticia.source.title.take(20) + "..." else noticia.source.title,
                    )
                 Row () {
                     OutlinedButton(

@@ -11,6 +11,7 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
@@ -19,6 +20,9 @@ import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.OutlinedTextField
+import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -32,6 +36,7 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontFamily
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
@@ -39,12 +44,16 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import br.com.fiap.kotlin_news.ui.theme.White
 import br.com.fiap.kotlin_news.R
+import br.com.fiap.kotlin_news.ui.theme.GrayLight
+import br.com.fiap.kotlin_news.ui.theme.GreenLight
+import br.com.fiap.kotlin_news.ui.theme.GreenPrimary
+import br.com.fiap.kotlin_news.ui.theme.GreenSecondary
 
 @Composable
 fun HomeScreen(navController: NavController) {
 
     var localizacao by remember {
-        mutableStateOf("Belo Horizonte")
+        mutableStateOf("")
     }
 
     val defaultFontFamily = FontFamily.Serif
@@ -81,67 +90,37 @@ fun HomeScreen(navController: NavController) {
         textAlign = TextAlign.Center
     )
 
-
-//    Box(modifier = Modifier.fillMaxSize()) {
-//        Text(text = "Opa pessoal!",
-//            modifier = Modifier.padding(top = 34.dp))
-//
-//        Button(onClick = {
-//            navController.navigate("noticias/${localizacao}")
-//        }) {
-//            Text(text = "IR!!")
-//        }
-//    }
-
     Box(
-        modifier = Modifier.fillMaxSize()
+        modifier = Modifier
+            .fillMaxSize()
+            .background(GreenLight)
     ) {
 
         Image(
-            painter = painterResource(id = R.mipmap.imgg),
+            painter = painterResource(id = R.drawable.ball),
             contentDescription = "Imagem de fundo",
             contentScale = ContentScale.Crop,
             modifier = Modifier
+                .padding(bottom = 0.dp,)
                 .fillMaxWidth()
+                .offset(y = (250.dp))
                 .align(Alignment.BottomCenter)
-                .height(620.dp)
+//                .height(620.dp)
         )
         Column(
             modifier = Modifier
                 .fillMaxSize()
-                .background(Color(0xFF5BB9A7).copy(alpha = 0.6f)),
+                .background(Color(0xFF225F53).copy(alpha = 0.6f)),
             verticalArrangement = Arrangement.Top,
             horizontalAlignment = Alignment.Start
         ) {
 
-            Text(
-                text = "BUSCA",
-                style = titleStyle,
+            Image(
+                painter = painterResource(id = R.drawable.logo_capa),
+                contentDescription = "Imagem ao lado do NEWS",
                 modifier = Modifier
-                    .padding(start = 1.dp, top = 45.dp)
+                    .size(200.dp)
             )
-
-            Row(
-                verticalAlignment = Alignment.CenterVertically,
-                modifier = Modifier
-                    .padding(start = 1.dp, top = 0.dp)
-                    .fillMaxWidth()
-            ) {
-                Text(
-                    text = "NEWS",
-                    style = newsStyle
-                )
-
-                Spacer(modifier = Modifier.width(8.dp))
-
-                Image(
-                    painter = painterResource(id = R.mipmap.immg),
-                    contentDescription = "Imagem ao lado do NEWS",
-                    contentScale = ContentScale.Fit,
-                    modifier = Modifier
-                        .size(40.dp)
-                )
-            }
 
             Spacer(modifier = Modifier.height(4.dp))
 
@@ -168,60 +147,93 @@ fun HomeScreen(navController: NavController) {
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
                     Text(
-                        text = "Coloque sua região de preferência",
+                        text = "1. Coloque sua região de preferência",
                         style = TextStyle(
-                            fontSize = 20.sp,
+                            fontSize = 18.sp,
                             color = Color.White,
                             textAlign = TextAlign.Center
                         ),
+                        fontWeight = FontWeight.Bold,
                         modifier = Modifier.padding(bottom = 16.dp)
                     )
 
-                    Box(
+//                    Box(
+//                        modifier = Modifier
+//                            .size(width = 274.dp, height = 40.dp)
+//                            .background(Color(0xFFD9D9D9), shape = RoundedCornerShape(20.dp))
+//                            .padding(horizontal = 16.dp, vertical = 8.dp),
+//                        contentAlignment = Alignment.CenterStart
+//                    ) {
+//
+//                    }
+                    OutlinedTextField(
+                        value = localizacao,
+                        onValueChange = { localizacao = it },
+                        textStyle = TextStyle(
+                            color = Color.Gray,
+                            fontSize = 15.sp,
+                            fontFamily = FontFamily.SansSerif
+                        ),
+                        colors = OutlinedTextFieldDefaults.colors(
+                            focusedBorderColor = GreenPrimary,
+                            unfocusedBorderColor = GreenPrimary,
+                            cursorColor = GreenPrimary,
+                            focusedContainerColor = Color.LightGray,
+                            unfocusedContainerColor =  Color.LightGray,
+                        ),
+                        placeholder = {
+                            Text(text = "Informe sua cidade",
+                                color = Color(0xFF9F9F9F))
+                        },
                         modifier = Modifier
-                            .size(width = 274.dp, height = 40.dp)
-                            .background(Color(0xFFD9D9D9), shape = RoundedCornerShape(20.dp))
-                            .padding(horizontal = 16.dp, vertical = 8.dp),
-                        contentAlignment = Alignment.CenterStart
-                    ) {
-                        BasicTextField(
-                            value = localizacao,
-                            onValueChange = { localizacao = it },
-                            textStyle = TextStyle(
-                                color = Color.Gray,
-                                fontSize = 15.sp,
-                                fontFamily = FontFamily.Serif
-                            ),
-                            keyboardOptions = KeyboardOptions.Default.copy(
-                                imeAction = ImeAction.Done
-                            )
+                            .height(50.dp)
+                            .width(270.dp),
+                        shape = RoundedCornerShape(10.dp),
+                        keyboardOptions = KeyboardOptions(
+                            imeAction = ImeAction.Done
                         )
-                    }
+                    )
+
+
+                    Spacer(modifier = Modifier.height(30.dp))
+
+                    Text(
+                        text = "2. Clique em “IR” e veja as principais\n" +
+                                "notícias da sua região",
+                        style = TextStyle(
+                            fontSize = 18.sp,
+                            color = Color.White,
+                            textAlign = TextAlign.Center
+                        ),
+                        fontWeight = FontWeight.Bold,
+                        modifier = Modifier.padding(bottom = 16.dp)
+                    )
 
                     Spacer(modifier = Modifier.height(8.dp))
 
-                    Box(
+                    Button(
+                        onClick = {
+                            if(localizacao != "") {
+                                navController.navigate("noticias/${localizacao}")
+                            }
+                        },
+                        colors = ButtonDefaults.buttonColors(GreenPrimary),
                         modifier = Modifier
-                            .size(width = 62.dp, height = 38.dp)
-                            .background(Color(0xFF008060), shape = RoundedCornerShape(10.dp))
-                            .padding(horizontal = 8.dp, vertical = 4.dp)
-                            .clickable { navController.navigate("noticias/${localizacao}") },
-                        contentAlignment = Alignment.Center
+                            .size(width = 100.dp, height = 50.dp)
+                            .padding(horizontal = 8.dp, vertical = 4.dp),
+
+                        shape = RoundedCornerShape(7.dp)
 
                     ) {
                         Text(
                             text = "IR!",
-                            style = buttonTextStyle
+                            color = White,
+                            fontSize = 16.sp,
+                            style = buttonTextStyle,
+                            fontWeight = FontWeight.SemiBold,
                         )
                     }
 
-                    Spacer(modifier = Modifier.height(8.dp))
-
-                    Text(
-                        text = "Clique em “IR” e veja as principais\nnotícias da sua região",
-                        style = infoTextStyle,
-                        modifier = Modifier.padding(horizontal = 16.dp)
-                    )
                 }
             }
         }
