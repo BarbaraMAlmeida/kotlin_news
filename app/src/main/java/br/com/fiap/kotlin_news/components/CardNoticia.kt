@@ -91,12 +91,12 @@ fun CardNoticia(noticia: Noticia, navController: NavController) {
             Row (modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.SpaceBetween,
                 verticalAlignment = Alignment.CenterVertically) {
-                val originalBytes = noticia.source.title.toByteArray(Charsets.ISO_8859_1)
-                val correctedTitle = String(originalBytes, Charsets.UTF_8)
-                val formattedSource = correctedTitle.replace("?", "i");
+//                val originalBytes = noticia.source.title.toByteArray(Charsets.ISO_8859_1)
+//                val correctedTitle = String(originalBytes, Charsets.UTF_8)
+//                val formattedSource = correctedTitle.replace("?", "i");
                 Text(
                     color = Color.White,
-                    text = if (formattedSource.length > 25) formattedSource.take(25) + "..." else formattedSource,
+                    text = if (noticia.source.title.length > 25) noticia.source.title.take(25) + "..." else noticia.source.title,
                    )
                 Row () {
                     OutlinedButton(
