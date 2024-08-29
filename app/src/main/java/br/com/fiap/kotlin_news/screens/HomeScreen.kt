@@ -2,6 +2,7 @@ package br.com.fiap.kotlin_news.screens
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -44,10 +45,12 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import br.com.fiap.kotlin_news.ui.theme.White
 import br.com.fiap.kotlin_news.R
+import br.com.fiap.kotlin_news.ui.theme.Black
 import br.com.fiap.kotlin_news.ui.theme.GrayLight
 import br.com.fiap.kotlin_news.ui.theme.GreenLight
 import br.com.fiap.kotlin_news.ui.theme.GreenPrimary
 import br.com.fiap.kotlin_news.ui.theme.GreenSecondary
+import br.com.fiap.kotlin_news.components.DropdownHome
 
 @Composable
 fun HomeScreen(navController: NavController) {
@@ -112,12 +115,12 @@ fun HomeScreen(navController: NavController) {
                 .fillMaxSize()
                 .background(Color(0xFF225F53).copy(alpha = 0.6f)),
             verticalArrangement = Arrangement.Top,
-            horizontalAlignment = Alignment.Start
+            horizontalAlignment = Alignment.Start,
         ) {
 
             Image(
                 painter = painterResource(id = R.drawable.logo_capa),
-                contentDescription = "Imagem ao lado do NEWS",
+                contentDescription = "Busca News Logotipo",
                 modifier = Modifier
                     .size(200.dp)
             )
@@ -129,15 +132,12 @@ fun HomeScreen(navController: NavController) {
                 style = subtitleStyle,
                 modifier = Modifier
                     .padding(start = 8.dp)
+                    .offset(y = (-40.dp))
             )
-
-            Spacer(modifier = Modifier.height(12.dp))
 
             Box(
                 modifier = Modifier
-                    .fillMaxWidth()
-                    .weight(1f)
-                    .padding(top = 0.dp),
+                    .fillMaxWidth(),
                 contentAlignment = Alignment.Center
             ) {
                 Column(
@@ -146,8 +146,9 @@ fun HomeScreen(navController: NavController) {
                         .padding(horizontal = 15.dp),
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
+
                     Text(
-                        text = "1. Coloque sua região de preferência",
+                        text = "Informe seu estado",
                         style = TextStyle(
                             fontSize = 18.sp,
                             color = Color.White,
@@ -157,15 +158,54 @@ fun HomeScreen(navController: NavController) {
                         modifier = Modifier.padding(bottom = 16.dp)
                     )
 
-//                    Box(
+//                    OutlinedTextField(
+//                        value = localizacao,
+//                        onValueChange = { localizacao = it },
+//                        textStyle = TextStyle(
+//                            color = Color.Gray,
+//                            fontSize = 15.sp,
+//                            fontFamily = FontFamily.SansSerif
+//                        ),
+//                        colors = OutlinedTextFieldDefaults.colors(
+//                            focusedBorderColor = GreenPrimary,
+//                            unfocusedBorderColor = GreenPrimary,
+//                            cursorColor = GreenPrimary,
+//                            focusedContainerColor = Color.White,
+//                            unfocusedContainerColor =  Color.White,
+//                        ),
+//                        placeholder = {
+//                            Text(text = "Informe seu estado",
+//                                color = Color(0xFF9F9F9F))
+//                        },
 //                        modifier = Modifier
-//                            .size(width = 274.dp, height = 40.dp)
-//                            .background(Color(0xFFD9D9D9), shape = RoundedCornerShape(20.dp))
-//                            .padding(horizontal = 16.dp, vertical = 8.dp),
-//                        contentAlignment = Alignment.CenterStart
-//                    ) {
-//
-//                    }
+//                            .height(50.dp)
+//                            .width(270.dp),
+//                        shape = RoundedCornerShape(10.dp),
+//                        keyboardOptions = KeyboardOptions(
+//                            imeAction = ImeAction.Done
+//                        )
+//                    )
+
+                    DropdownHome("Informe seu estado")
+
+
+
+                    Spacer(modifier = Modifier.height(30.dp))
+
+
+                    Text(
+                        text = "Informe sua cidade de preferência",
+                        style = TextStyle(
+                            fontSize = 18.sp,
+                            color = Color.White,
+                            textAlign = TextAlign.Center
+                        ),
+                        fontWeight = FontWeight.Bold,
+                        modifier = Modifier.padding(bottom = 16.dp)
+                    )
+
+                    DropdownHome("Informe sua cidade")
+
                     OutlinedTextField(
                         value = localizacao,
                         onValueChange = { localizacao = it },
@@ -178,8 +218,8 @@ fun HomeScreen(navController: NavController) {
                             focusedBorderColor = GreenPrimary,
                             unfocusedBorderColor = GreenPrimary,
                             cursorColor = GreenPrimary,
-                            focusedContainerColor = Color.LightGray,
-                            unfocusedContainerColor =  Color.LightGray,
+                            focusedContainerColor = Color.White,
+                            unfocusedContainerColor =  Color.White,
                         ),
                         placeholder = {
                             Text(text = "Informe sua cidade",
@@ -198,7 +238,7 @@ fun HomeScreen(navController: NavController) {
                     Spacer(modifier = Modifier.height(30.dp))
 
                     Text(
-                        text = "2. Clique em “IR” e veja as principais\n" +
+                        text = "Clique em “IR” e veja as principais\n" +
                                 "notícias da sua região",
                         style = TextStyle(
                             fontSize = 18.sp,

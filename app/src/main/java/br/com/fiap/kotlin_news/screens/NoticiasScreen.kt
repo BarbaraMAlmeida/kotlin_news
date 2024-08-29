@@ -9,6 +9,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -39,6 +40,10 @@ fun NoticiasScreen(navController: NavController, localizacaoPreferencia: String)
         mutableStateOf(listOf<Noticia>())
     }
 
+    var isLoading by remember {
+        mutableStateOf(true)
+    }
+
     Box(modifier = Modifier
         .fillMaxSize()
         .background(BackgroundDark)) {
@@ -63,6 +68,7 @@ fun NoticiasScreen(navController: NavController, localizacaoPreferencia: String)
                     ) {
                         if (response.isSuccessful) {
                             listaNoticiasState = response.body()?.articles?.results  ?: emptyList()
+                            isLoading = false
                             Log.i("fiap", "onResponse ${response.body()}")
                         } else {
                             Log.e("fiap", "Erro na resposta: ${response.errorBody()?.string()}")
@@ -75,9 +81,19 @@ fun NoticiasScreen(navController: NavController, localizacaoPreferencia: String)
                 })
             }
 
-            LazyColumn() {
-                items(listaNoticiasState) {
-                    CardNoticia(it, navController)
+            if(isLoading) {
+                Box(
+                    modifier = Modifier.fillMaxSize(),
+                    contentAlignment = androidx.compose.ui.Alignment.Center
+                ) {
+                    CircularProgressIndicator(color = androidx.compose.ui.graphics.Color.White)
+                }
+            }
+            else {
+                LazyColumn() {
+                    items(listaNoticiasState) {
+                        CardNoticia(it, navController)
+                    }
                 }
             }
         }
