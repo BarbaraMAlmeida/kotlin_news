@@ -45,7 +45,7 @@ import java.net.URLEncoder
 import java.nio.charset.StandardCharsets
 
 @Composable
-fun CardNoticia(noticia: Noticia, navController: NavController) {
+fun CardNoticia(noticia: Noticia, navController: NavController, localizacao: String) {
     Log.i("noticia", "${noticia}")
 
     Spacer(modifier = Modifier.height(10.dp))
@@ -104,7 +104,7 @@ fun CardNoticia(noticia: Noticia, navController: NavController) {
                             val gson = Gson()
                             val noticiaJson = gson.toJson(noticia)
                             val encodedJson = URLEncoder.encode(noticiaJson, StandardCharsets.UTF_8.toString())
-                            navController.navigate("detalhe-noticia/$encodedJson")
+                            navController.navigate("detalhe-noticia/${localizacao}/$encodedJson")
                         },
                         modifier = Modifier.height(40.dp),
                         colors = ButtonDefaults.buttonColors(

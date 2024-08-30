@@ -33,7 +33,7 @@ import retrofit2.Response
 fun NoticiasScreen(navController: NavController, localizacaoPreferencia: String) {
 
     var localizacao by remember {
-        mutableStateOf("${localizacaoPreferencia}")
+        mutableStateOf("${localizacaoPreferencia.replace("_", " ")}")
     }
 
     var listaNoticiasState by remember {
@@ -56,7 +56,7 @@ fun NoticiasScreen(navController: NavController, localizacaoPreferencia: String)
             Spacer(modifier = Modifier.height(10.dp))
             // Usando LaunchedEffect para carregar dados automaticamente ao abrir a tela
             LaunchedEffect(localizacao) {
-                val path = "https://en.wikipedia.org/wiki/${localizacao}";
+                val path = "https://en.wikipedia.org/wiki/${localizacao.replace(" ", "_")}";
                 val call = RetrofitFactory()
                     .getNoticiaService()
                     .getNoticiaByCidade(path)
@@ -92,7 +92,7 @@ fun NoticiasScreen(navController: NavController, localizacaoPreferencia: String)
             else {
                 LazyColumn() {
                     items(listaNoticiasState) {
-                        CardNoticia(it, navController)
+                        CardNoticia(it, navController, localizacao)
                     }
                 }
             }

@@ -38,7 +38,7 @@ import br.com.fiap.kotlin_news.ui.theme.GreenPrimary
 import br.com.fiap.kotlin_news.ui.theme.White
 
 @Composable
-fun TopMenu(localizacao: String, onLocalizacaoChange: (String) -> Unit) {
+fun TopMenu(localizacao: String = "", onLocalizacaoChange: (String) -> Unit) {
 
     var isInputVisible by remember {
         mutableStateOf(false)

@@ -34,10 +34,12 @@ import androidx.compose.ui.unit.sp
 import br.com.fiap.kotlin_news.R
 import br.com.fiap.kotlin_news.components.TopMenu
 import coil.compose.rememberAsyncImagePainter
+import java.text.SimpleDateFormat
+import java.util.Date
 
 
 @Composable
-fun DetalheNoticiaScreen(navController: NavController, noticia: Noticia) {
+fun DetalheNoticiaScreen(navController: NavController, noticia: Noticia, localizacao: String?) {
 
     Log.i("noticia detalhe", "${noticia}")
 
@@ -48,21 +50,17 @@ fun DetalheNoticiaScreen(navController: NavController, noticia: Noticia) {
         .background(White)
         .verticalScroll(scrollState)) {
         Column() {
-            TopMenu(localizacao = "Belo Horizonte"){}
+            TopMenu(localizacao = "${localizacao}") {}
 
             Spacer(modifier = Modifier.height(10.dp))
 
-            Column (modifier = Modifier.fillMaxSize()) {
-//                Spacer(modifier = Modifier.height(40.dp))
-////                Text(text = "oi ${noticia.title}",
-////                    color = Black)
-
-                Spacer(modifier = Modifier.height(0.dp))
+            Column(modifier = Modifier.fillMaxSize()
+                .padding(12.dp)) {
 
                 // Título da notícia
                 Text(
                     text = "${noticia.title}",
-                    fontSize = 16.sp,
+                    fontSize = 20.sp,
                     fontWeight = FontWeight.Bold,
                     modifier = Modifier.padding(vertical = 8.dp)
                 )
@@ -76,6 +74,7 @@ fun DetalheNoticiaScreen(navController: NavController, noticia: Noticia) {
 
                 // Data e hora
                 Text(
+
                     text = "Data de publicação: ${noticia.date}",
                     fontSize = 12.sp,
                     color = Color.Gray,
@@ -85,51 +84,34 @@ fun DetalheNoticiaScreen(navController: NavController, noticia: Noticia) {
                 // Imagem da superlua 1
                 Image(
                     painter = rememberAsyncImagePainter(model = noticia.image),
-                    contentDescription = "Superlua 1",
+                    contentDescription = "Imagem da notícia",
                     contentScale = ContentScale.Crop,
                     modifier = Modifier
                         .fillMaxWidth()
                         .height(200.dp)
                 )
 
-                //Texto da imagem 1
 
                 Text(
                     text = "${noticia.body}",
-                    fontSize = 14.sp,
+                    fontSize = 16.sp,
                     color = Color.Black,
                     modifier = Modifier.padding(vertical = 8.dp)
                 )
 
-//                // Imagem da superlua 2
-//                Image(
-//                    painter = painterResource(id = R.drawable.ball),
-//                    contentDescription = "Superlua 2",
-//                    contentScale = ContentScale.Crop,
-//                    modifier = Modifier
-//                        .fillMaxWidth()
-//                        .height(200.dp)
-//                )
-
-//                // Descrição da imagem 2
-//                Text(
-//                    text = "Superlua Azul vista no bairro Cajazeiras na cidade de Fortaleza-CE.",
-//                    fontSize = 10.sp,
-//                    color = Color.Gray,
-//                    modifier = Modifier.padding(vertical = 8.dp)
-//                )
-
-                // Espaço para os botões
                 Spacer(modifier = Modifier.height(20.dp))
 
                 // Botões de ação
                 Row(
                     horizontalArrangement = Arrangement.End,
                     modifier = Modifier.fillMaxWidth()
+                        .padding(bottom = 20.dp)
                 ) {
                     Button(
-                        modifier = Modifier.width(150.dp),
-                        onClick = { /*TODO*/ },
+                        modifier = Modifier.width(160.dp),
+                        onClick = {
+                            navController.navigate("noticias/")
+                        },
                         shape = RoundedCornerShape(12.dp),
                         colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF008060))
                     )
@@ -140,11 +122,11 @@ fun DetalheNoticiaScreen(navController: NavController, noticia: Noticia) {
                             horizontalArrangement = Arrangement.SpaceBetween) {
                             Icon(
                                 painter = painterResource(id = R.drawable.favorite),
-                                contentDescription = "local",
+                                contentDescription = "icone de favoritar",
                                 modifier = Modifier
                                     .size(26.dp)
                             )
-                            Text(text = "Favoritos")
+                            Text(text = "Favoritar")
                         }
                     }
                     Spacer(modifier = Modifier.width(10.dp))
@@ -161,7 +143,7 @@ fun DetalheNoticiaScreen(navController: NavController, noticia: Noticia) {
                             horizontalArrangement = Arrangement.SpaceBetween) {
                             Icon(
                                 painter = painterResource(id = R.drawable.share),
-                                contentDescription = "local",
+                                contentDescription = "icone de compartilhamento",
                                 modifier = Modifier
                                     .size(26.dp)
                             )

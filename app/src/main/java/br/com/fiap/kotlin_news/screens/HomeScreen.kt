@@ -1,5 +1,6 @@
 package br.com.fiap.kotlin_news.screens
 
+import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -26,6 +27,7 @@ import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -51,6 +53,15 @@ import br.com.fiap.kotlin_news.ui.theme.GreenLight
 import br.com.fiap.kotlin_news.ui.theme.GreenPrimary
 import br.com.fiap.kotlin_news.ui.theme.GreenSecondary
 import br.com.fiap.kotlin_news.components.DropdownHome
+import br.com.fiap.kotlin_news.model.Cidade
+import br.com.fiap.kotlin_news.model.Estado
+import br.com.fiap.kotlin_news.model.NewsResponse
+import br.com.fiap.kotlin_news.model.Noticia
+import br.com.fiap.kotlin_news.service.IbgeFactory
+import br.com.fiap.kotlin_news.service.RetrofitFactory
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 
 @Composable
 fun HomeScreen(navController: NavController) {
@@ -59,45 +70,74 @@ fun HomeScreen(navController: NavController) {
         mutableStateOf("")
     }
 
-    val defaultFontFamily = FontFamily.Serif
-    val titleStyle = TextStyle(
-        fontSize = 48.sp,
-        color = White,
-        fontFamily = defaultFontFamily,
-        letterSpacing = (-0.16).sp,
-        textAlign = TextAlign.Center
-    )
+    var listaEstados by remember {
+        mutableStateOf(listOf<Estado>())
+    }
 
-    val newsStyle = TextStyle(
-        fontSize = 48.sp,
-        color = Color(0xFF008060),
-        fontFamily = defaultFontFamily,
-        letterSpacing = (-0.16).sp,
-        textAlign = TextAlign.Center
-    )
+    var listaCidades by remember {
+        mutableStateOf(listOf<Cidade>())
+    }
 
-    val subtitleStyle = TextStyle(
-        fontSize = 20.sp,
-        color = Color.White,
-        textAlign = TextAlign.Center
-    )
+    var estadoSelecionado by remember { mutableStateOf<Estado?>(null) }
+    var cidadeSelecionada by remember { mutableStateOf<Cidade?>(null) }
 
-    val buttonTextStyle = TextStyle(
-        fontSize = 12.sp,
-        color = Color.White
-    )
 
-    val infoTextStyle = TextStyle(
-        fontSize = 16.sp,
-        color = Color.White,
-        textAlign = TextAlign.Center
-    )
+    LaunchedEffect(Unit) {
+        val callEstados = IbgeFactory()
+            .getLocalidadeService()
+            .getEstados()
+
+        callEstados.enqueue(object : Callback<List<Estado>> {
+            override fun onResponse(
+                call: Call<List<Estado>>,
+                response: Response<List<Estado>>
+            ) {
+                if (response.isSuccessful) {
+                    listaEstados = response.body() ?: emptyList()
+                    Log.i("fiap", "Estados carregados: ${listaEstados.size}")
+                } else {
+                    Log.e("fiap", "Erro na resposta: ${response.errorBody()?.string()}")
+                }
+            }
+
+            override fun onFailure(call: Call<List<Estado>>, t: Throwable) {
+                Log.e("fiap", "Falha na requisição: ${t.message}")
+            }
+        })
+    }
+
+    LaunchedEffect(estadoSelecionado) {
+        estadoSelecionado?.let { estado ->
+            val callCidades = IbgeFactory()
+                .getLocalidadeService()
+                .getCidadesByEstado(estado.sigla)
+
+            callCidades.enqueue(object : Callback<List<Cidade>> {
+                override fun onResponse(
+                    call: Call<List<Cidade>>,
+                    response: Response<List<Cidade>>
+                ) {
+                    if (response.isSuccessful) {
+                        listaCidades = response.body() ?: emptyList()
+                        Log.i("fiap", "Cidades carregadas: ${listaCidades.size}")
+                    } else {
+                        Log.e("fiap", "Erro na resposta: ${response.errorBody()?.string()}")
+                    }
+                }
+
+                override fun onFailure(call: Call<List<Cidade>>, t: Throwable) {
+                    Log.e("fiap", "Falha na requisição: ${t.message}")
+                }
+            })
+        }
+    }
 
     Box(
         modifier = Modifier
             .fillMaxSize()
             .background(GreenLight)
     ) {
+
 
         Image(
             painter = painterResource(id = R.drawable.ball),
@@ -129,7 +169,6 @@ fun HomeScreen(navController: NavController) {
 
             Text(
                 text = "Seu buscador de noticias",
-                style = subtitleStyle,
                 modifier = Modifier
                     .padding(start = 8.dp)
                     .offset(y = (-40.dp))
@@ -158,6 +197,37 @@ fun HomeScreen(navController: NavController) {
                         modifier = Modifier.padding(bottom = 16.dp)
                     )
 
+                    DropdownHome(
+                        label = "Selecione um estado",
+                        optionsEstado = listaEstados,
+                        optionsCidade = emptyList(),
+                        onEstadoSelecionado = { estadoSelecionado = it },
+                        onCidadeSelecionada = { cidadeSelecionada = it }
+                    )
+                    if (estadoSelecionado != null) {
+                        Spacer(modifier = Modifier.height(30.dp))
+
+                        Text(
+                            text = "Informe sua cidade de preferência",
+                            style = TextStyle(
+                                fontSize = 18.sp,
+                                color = Color.White,
+                                textAlign = TextAlign.Center
+                            ),
+                            fontWeight = FontWeight.Bold,
+                            modifier = Modifier.padding(bottom = 16.dp)
+                        )
+
+                        DropdownHome(
+                            label = "Selecione uma cidade",
+                            optionsEstado = emptyList(),
+                            optionsCidade = listaCidades,
+                            onEstadoSelecionado = {},
+                            onCidadeSelecionada = { cidadeSelecionada = it }
+                        )
+                    }
+
+
 //                    OutlinedTextField(
 //                        value = localizacao,
 //                        onValueChange = { localizacao = it },
@@ -174,7 +244,7 @@ fun HomeScreen(navController: NavController) {
 //                            unfocusedContainerColor =  Color.White,
 //                        ),
 //                        placeholder = {
-//                            Text(text = "Informe seu estado",
+//                            Text(text = "Informe sua cidade",
 //                                color = Color(0xFF9F9F9F))
 //                        },
 //                        modifier = Modifier
@@ -185,54 +255,6 @@ fun HomeScreen(navController: NavController) {
 //                            imeAction = ImeAction.Done
 //                        )
 //                    )
-
-                    DropdownHome("Informe seu estado")
-
-
-
-                    Spacer(modifier = Modifier.height(30.dp))
-
-
-                    Text(
-                        text = "Informe sua cidade de preferência",
-                        style = TextStyle(
-                            fontSize = 18.sp,
-                            color = Color.White,
-                            textAlign = TextAlign.Center
-                        ),
-                        fontWeight = FontWeight.Bold,
-                        modifier = Modifier.padding(bottom = 16.dp)
-                    )
-
-                    DropdownHome("Informe sua cidade")
-
-                    OutlinedTextField(
-                        value = localizacao,
-                        onValueChange = { localizacao = it },
-                        textStyle = TextStyle(
-                            color = Color.Gray,
-                            fontSize = 15.sp,
-                            fontFamily = FontFamily.SansSerif
-                        ),
-                        colors = OutlinedTextFieldDefaults.colors(
-                            focusedBorderColor = GreenPrimary,
-                            unfocusedBorderColor = GreenPrimary,
-                            cursorColor = GreenPrimary,
-                            focusedContainerColor = Color.White,
-                            unfocusedContainerColor =  Color.White,
-                        ),
-                        placeholder = {
-                            Text(text = "Informe sua cidade",
-                                color = Color(0xFF9F9F9F))
-                        },
-                        modifier = Modifier
-                            .height(50.dp)
-                            .width(270.dp),
-                        shape = RoundedCornerShape(10.dp),
-                        keyboardOptions = KeyboardOptions(
-                            imeAction = ImeAction.Done
-                        )
-                    )
 
 
                     Spacer(modifier = Modifier.height(30.dp))
@@ -253,8 +275,9 @@ fun HomeScreen(navController: NavController) {
 
                     Button(
                         onClick = {
-                            if(localizacao != "") {
-                                navController.navigate("noticias/${localizacao}")
+                            if(cidadeSelecionada != null) {
+                                val formattedLocation = cidadeSelecionada?.nome?.replace(" ", "_");
+                                navController.navigate("noticias/${formattedLocation}")
                             }
                         },
                         colors = ButtonDefaults.buttonColors(GreenPrimary),
@@ -269,7 +292,6 @@ fun HomeScreen(navController: NavController) {
                             text = "IR!",
                             color = White,
                             fontSize = 16.sp,
-                            style = buttonTextStyle,
                             fontWeight = FontWeight.SemiBold,
                         )
                     }

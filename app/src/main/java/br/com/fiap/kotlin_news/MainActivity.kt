@@ -39,18 +39,22 @@ class MainActivity : ComponentActivity() {
 
                         }
                         composable(route = "noticias/{localizacao}") {
-                            val localizacao_preferencia = it.arguments?.getString("localizacao")
+                           val localizacao_preferencia = it.arguments?.getString("localizacao")
                             NoticiasScreen(navController, localizacao_preferencia!!)
 
                         }
                         composable(
-                            route = "detalhe-noticia/{noticia}",
-                            arguments = listOf(navArgument("noticia") { type = NavType.StringType })
+                            route = "detalhe-noticia/{localizacao}/{noticia}",
+                            arguments = listOf(
+                                navArgument("localizacao") { type = NavType.StringType },
+                                navArgument("noticia") { type = NavType.StringType }
+                            )
                         ) {
+                            val encodedLocalizacao = it.arguments?.getString("localizacao")
                             val encodedJson = it.arguments?.getString("noticia")
                             val decodedJson = URLDecoder.decode(encodedJson, StandardCharsets.UTF_8.toString())
                             val noticia = Gson().fromJson(decodedJson, Noticia::class.java)
-                            DetalheNoticiaScreen(navController, noticia)
+                            DetalheNoticiaScreen(navController, noticia, encodedLocalizacao)
                         }
 
                     }
