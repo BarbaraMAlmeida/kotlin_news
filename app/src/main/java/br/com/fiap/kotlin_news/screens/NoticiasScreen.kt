@@ -29,6 +29,20 @@ import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
+
+fun atualizarTitulosSource(newsResponse: NewsResponse): NewsResponse {
+    val novosArtigos = newsResponse.articles.results.map { article ->
+        if (article.source.title.contains("RDNEWS - Portal de not�cias de MT")) {
+        val novoSource = article.source.copy(title = "RDNEWS - Portal de notícias de MT")
+        article.copy(source = novoSource)
+        } else {
+            article
+        }
+    }
+
+    return newsResponse.copy(articles = newsResponse.articles.copy(results = novosArtigos.toMutableList()))
+}
+
 @Composable
 fun NoticiasScreen(navController: NavController, localizacaoPreferencia: String) {
 
@@ -67,8 +81,13 @@ fun NoticiasScreen(navController: NavController, localizacaoPreferencia: String)
                         response: Response<NewsResponse>
                     ) {
                         if (response.isSuccessful) {
-                            listaNoticiasState = response.body()?.articles?.results  ?: emptyList()
+                            val body = response.body()
+                            val artigosAtualizados = body?.let { atualizarTitulosSource(it) }
+
+                            listaNoticiasState = artigosAtualizados?.articles?.results?: emptyList()
                             isLoading = false
+
+                            //LOG
                             Log.i("fiap", "onResponse ${response.body()}")
                         } else {
                             Log.e("fiap", "Erro na resposta: ${response.errorBody()?.string()}")
@@ -77,9 +96,14 @@ fun NoticiasScreen(navController: NavController, localizacaoPreferencia: String)
 
                     override fun onFailure(call: Call<NewsResponse>, t: Throwable) {
                         Log.e("fiap", "Falha na requisição: ${t.message}")
+                        isLoading = false
                     }
                 })
             }
+
+
+
+
 
             if(isLoading) {
                 Box(

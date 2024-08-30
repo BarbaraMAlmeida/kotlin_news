@@ -4,6 +4,7 @@ import okhttp3.OkHttpClient
 import okhttp3.Request
 import okhttp3.Response
 import okhttp3.ResponseBody
+import okhttp3.ResponseBody.Companion.toResponseBody
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
@@ -11,7 +12,6 @@ class RetrofitFactory {
 
     private val API_KEY = "8af2e8c4-704f-452e-a4e3-c36f4630a046"
     private val URL = "https://eventregistry.org/api/v1/article/" // URL base terminando com '/'
-
     // Configura o cliente HTTP com um Interceptor
     private val client = OkHttpClient.Builder()
         .addInterceptor { chain ->
@@ -52,7 +52,7 @@ class RetrofitFactory {
             }
 
             // Cria uma nova resposta com o corpo decodificado
-            val newResponseBody = ResponseBody.create(responseBody?.contentType(), utf8String ?: "")
+            val newResponseBody = (utf8String ?: "").toResponseBody(responseBody?.contentType())
 
             response.newBuilder()
                 .body(newResponseBody)

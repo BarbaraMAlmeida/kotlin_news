@@ -1,7 +1,6 @@
 package br.com.fiap.kotlin_news.service
 
 import br.com.fiap.kotlin_news.model.NewsResponse
-import br.com.fiap.kotlin_news.model.Results
 import retrofit2.Call
 import retrofit2.http.GET
 import retrofit2.http.Headers
