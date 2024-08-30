@@ -38,27 +38,26 @@ import br.com.fiap.kotlin_news.ui.theme.GreenPrimary
 import br.com.fiap.kotlin_news.ui.theme.White
 
 @Composable
-fun TopMenu(localizacao: String = "", onLocalizacaoChange: (String) -> Unit) {
+fun TopMenu(localizacao: String = "", onLocalizacaoChange: ((String) -> Unit)? = null) {
 
     var isInputVisible by remember {
         mutableStateOf(false)
     }
 
-    var newLocalizacao  by remember {
+    var newLocalizacao by remember {
         mutableStateOf(localizacao)
     }
 
-    Box(modifier = Modifier
-        .fillMaxWidth()
-        .height(100.dp)
-        .background(GreenPrimary)) {
+    Box(
+        modifier = Modifier
+            .fillMaxWidth()
+            .height(100.dp)
+            .background(GreenPrimary)
+    ) {
         Row(
             modifier = Modifier
                 .fillMaxSize()
-                .padding(
-                    top = 30.dp, bottom = 16.dp, start = 8.dp,
-                    end = 8.dp
-                )
+                .padding(top = 30.dp, bottom = 16.dp, start = 8.dp, end = 8.dp)
                 .height(80.dp),
             horizontalArrangement = Arrangement.SpaceBetween,
             verticalAlignment = Alignment.CenterVertically
@@ -70,7 +69,6 @@ fun TopMenu(localizacao: String = "", onLocalizacaoChange: (String) -> Unit) {
                     contentDescription = "Globo",
                     tint = Color.White,
                     modifier = Modifier.size(32.dp)
-
                 )
 
                 Column(modifier = Modifier.padding(start = 8.dp)) {
@@ -80,11 +78,16 @@ fun TopMenu(localizacao: String = "", onLocalizacaoChange: (String) -> Unit) {
                         color = Color.White
                     )
                     Spacer(modifier = Modifier.height(4.dp))
-                    Text(text = newLocalizacao,
+                    Text(
+                        text = newLocalizacao,
                         fontSize = 16.sp,
                         color = Color.White,
                         fontWeight = FontWeight.Bold,
-                        modifier = Modifier.clickable { isInputVisible = true }
+                        modifier = Modifier.clickable {
+                            if (onLocalizacaoChange != null) { // Verifica se o callback foi passado
+                                isInputVisible = true
+                            }
+                        }
                     )
                 }
             }
@@ -92,8 +95,8 @@ fun TopMenu(localizacao: String = "", onLocalizacaoChange: (String) -> Unit) {
             Image(
                 painter = painterResource(id = R.drawable.logo_branca_foreground),
                 contentDescription = "Descrição da imagem",
-                modifier = Modifier.size(90.dp), // Ajuste o tamanho da imagem
-                contentScale = ContentScale.Crop // Ajuste como a imagem deve ser escalada
+                modifier = Modifier.size(90.dp),
+                contentScale = ContentScale.Crop
             )
 
         }
@@ -102,7 +105,7 @@ fun TopMenu(localizacao: String = "", onLocalizacaoChange: (String) -> Unit) {
             Box(
                 modifier = Modifier
                     .fillMaxSize()
-                    .background(Color.Black.copy(alpha = 0.7f)) // Fundo para destacar o input
+                    .background(Color.Black.copy(alpha = 0.7f))
             ) {
                 OutlinedTextField(
                     value = newLocalizacao,
@@ -126,12 +129,11 @@ fun TopMenu(localizacao: String = "", onLocalizacaoChange: (String) -> Unit) {
                     keyboardActions = KeyboardActions(
                         onDone = {
                             isInputVisible = false
-                            onLocalizacaoChange(newLocalizacao)
+                            onLocalizacaoChange?.invoke(newLocalizacao) // Chama o callback apenas se ele não for nulo
                         }
                     )
                 )
             }
         }
-
     }
 }

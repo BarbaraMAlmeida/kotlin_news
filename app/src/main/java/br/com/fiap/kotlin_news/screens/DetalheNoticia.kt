@@ -37,7 +37,6 @@ import coil.compose.rememberAsyncImagePainter
 import java.text.SimpleDateFormat
 import java.util.Date
 
-
 @Composable
 fun DetalheNoticiaScreen(navController: NavController, noticia: Noticia, localizacao: String?) {
 
@@ -50,7 +49,7 @@ fun DetalheNoticiaScreen(navController: NavController, noticia: Noticia, localiz
         .background(White)
         .verticalScroll(scrollState)) {
         Column() {
-            TopMenu(localizacao = "${localizacao}") {}
+            TopMenu(localizacao = "${localizacao}")
 
             Spacer(modifier = Modifier.height(10.dp))
 
