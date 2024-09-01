@@ -13,10 +13,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import br.com.fiap.kotlin_news.model.Noticia
-import br.com.fiap.kotlin_news.ui.theme.Black
 import br.com.fiap.kotlin_news.ui.theme.White
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -24,18 +22,13 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.tooling.preview.Preview
-
 import androidx.compose.ui.unit.sp
 import br.com.fiap.kotlin_news.R
 import br.com.fiap.kotlin_news.components.TopMenu
 import coil.compose.rememberAsyncImagePainter
-import java.text.SimpleDateFormat
-import java.util.Date
 
 @Composable
 fun DetalheNoticiaScreen(navController: NavController, noticia: Noticia, localizacao: String?) {
@@ -53,7 +46,8 @@ fun DetalheNoticiaScreen(navController: NavController, noticia: Noticia, localiz
 
             Spacer(modifier = Modifier.height(10.dp))
 
-            Column(modifier = Modifier.fillMaxSize()
+            Column(modifier = Modifier
+                .fillMaxSize()
                 .padding(12.dp)) {
 
                 // Título da notícia
@@ -80,7 +74,6 @@ fun DetalheNoticiaScreen(navController: NavController, noticia: Noticia, localiz
                     modifier = Modifier.padding(bottom = 5.dp)
                 )
 
-                // Imagem da superlua 1
                 Image(
                     painter = rememberAsyncImagePainter(model = noticia.image),
                     contentDescription = "Imagem da notícia",
@@ -89,7 +82,6 @@ fun DetalheNoticiaScreen(navController: NavController, noticia: Noticia, localiz
                         .fillMaxWidth()
                         .height(200.dp)
                 )
-
 
                 Text(
                     text = "${noticia.body}",
@@ -103,7 +95,8 @@ fun DetalheNoticiaScreen(navController: NavController, noticia: Noticia, localiz
                 // Botões de ação
                 Row(
                     horizontalArrangement = Arrangement.End,
-                    modifier = Modifier.fillMaxWidth()
+                    modifier = Modifier
+                        .fillMaxWidth()
                         .padding(bottom = 20.dp)
                 ) {
                     Button(
@@ -148,8 +141,6 @@ fun DetalheNoticiaScreen(navController: NavController, noticia: Noticia, localiz
                             )
                             Text(text = "Compartilhar")
                         }
-
-
                     }
 
                 }

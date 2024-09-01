@@ -3,7 +3,6 @@ package br.com.fiap.kotlin_news.service
 import okhttp3.OkHttpClient
 import okhttp3.Request
 import okhttp3.Response
-import okhttp3.ResponseBody
 import okhttp3.ResponseBody.Companion.toResponseBody
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory

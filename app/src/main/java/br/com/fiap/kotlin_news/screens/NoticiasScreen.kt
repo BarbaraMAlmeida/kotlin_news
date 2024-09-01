@@ -20,6 +20,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import br.com.fiap.kotlin_news.components.CardNoticia
+import br.com.fiap.kotlin_news.components.ListEmpty
 import br.com.fiap.kotlin_news.components.TopMenu
 import br.com.fiap.kotlin_news.model.NewsResponse
 import br.com.fiap.kotlin_news.model.Noticia
@@ -114,19 +115,17 @@ fun NoticiasScreen(navController: NavController, localizacaoPreferencia: String)
                 }
             }
             else {
-                LazyColumn() {
-                    items(listaNoticiasState) {
-                        CardNoticia(it, navController, localizacao)
+                if(listaNoticiasState.size <= 0) {
+                    ListEmpty(navController)
+                }
+                else {
+                    LazyColumn {
+                        items(listaNoticiasState) {
+                            CardNoticia(it, navController, localizacao)
+                        }
                     }
                 }
             }
         }
     }
 }
-
-
-//@Preview
-//@Composable
-//private fun NoticiasScreenPreview () {
-//    NoticiasScreen()
-//}
